@@ -5,11 +5,12 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\redis;
+namespace yii\db\redis;
 
-use Yii;
-use yii\base\InvalidConfigException;
+use yii\helpers\Yii;
+use yii\exceptions\InvalidConfigException;
 use yii\di\Instance;
+use yii\di\Initiable;
 
 /**
  * Redis Mutex implements a mutex component using [redis](http://redis.io/) as the storage medium.
@@ -25,7 +26,7 @@ use yii\di\Instance;
  * [
  *     'components' => [
  *         'mutex' => [
- *             'class' => 'yii\redis\Mutex',
+ *             'class' => 'yii\db\redis\Mutex',
  *             'redis' => [
  *                 'hostname' => 'localhost',
  *                 'port' => 6379,
@@ -42,7 +43,7 @@ use yii\di\Instance;
  * [
  *     'components' => [
  *         'mutex' => [
- *             'class' => 'yii\redis\Mutex',
+ *             'class' => 'yii\db\redis\Mutex',
  *             // 'redis' => 'redis' // id of the connection application component
  *         ],
  *     ],
@@ -56,7 +57,7 @@ use yii\di\Instance;
  * @author Alexander Zhuravlev <axelhex@gmail.com>
  * @since 2.0.6
  */
-class Mutex extends \yii\mutex\Mutex
+class Mutex extends \yii\mutex\Mutex implements Initiable
 {
     /**
      * @var int the number of seconds in which the lock will be auto released.
@@ -89,12 +90,11 @@ class Mutex extends \yii\mutex\Mutex
      * This method will initialize the [[redis]] property to make sure it refers to a valid redis connection.
      * @throws InvalidConfigException if [[redis]] is invalid.
      */
-    public function init()
+    public function init(): void
     {
-        parent::init();
-        $this->redis = Instance::ensure($this->redis, Connection::className());
+        $this->redis = Yii::ensureObject($this->redis, Connection::class);
         if ($this->keyPrefix === null) {
-            $this->keyPrefix = substr(md5(Yii::$app->id), 0, 5);
+            $this->keyPrefix = substr(md5(Yii::getApp()->id), 0, 5);
         }
     }
 
@@ -108,7 +108,7 @@ class Mutex extends \yii\mutex\Mutex
     protected function acquireLock($name, $timeout = 0)
     {
         $key = $this->calculateKey($name);
-        $value = Yii::$app->security->generateRandomString(20);
+        $value = Yii::getApp()->security->generateRandomString(20);
         $waitTime = 0;
         while (!$this->redis->executeCommand('SET', [$key, $value, 'NX', 'PX', (int) ($this->expire * 1000)])) {
             $waitTime++;

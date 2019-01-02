@@ -1,12 +1,12 @@
 <?php
 
-namespace yiiunit\extensions\redis;
+namespace yii\db\redis\tests;
 
 use yii\data\ActiveDataProvider;
-use yii\redis\ActiveQuery;
-use yiiunit\extensions\redis\data\ar\ActiveRecord;
-use yiiunit\extensions\redis\data\ar\Item;
-use yiiunit\framework\ar\ActiveRecordTestTrait;
+use yii\db\redis\ActiveQuery;
+use yii\db\redis\tests\data\ar\ActiveRecord;
+use yii\db\redis\tests\data\ar\Item;
+use yii\activerecord\tests\unit\ActiveRecordTestTrait;
 
 /**
  * @group redis

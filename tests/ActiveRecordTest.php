@@ -1,17 +1,17 @@
 <?php
 
-namespace yiiunit\extensions\redis;
+namespace yii\db\redis\tests;
 
-use yii\redis\ActiveQuery;
-use yii\redis\LuaScriptBuilder;
-use yiiunit\extensions\redis\data\ar\ActiveRecord;
-use yiiunit\extensions\redis\data\ar\Customer;
-use yiiunit\extensions\redis\data\ar\OrderItem;
-use yiiunit\extensions\redis\data\ar\Order;
-use yiiunit\extensions\redis\data\ar\Item;
-use yiiunit\extensions\redis\data\ar\OrderItemWithNullFK;
-use yiiunit\extensions\redis\data\ar\OrderWithNullFK;
-use yiiunit\framework\ar\ActiveRecordTestTrait;
+use yii\db\redis\ActiveQuery;
+use yii\db\redis\LuaScriptBuilder;
+use yii\db\redis\tests\data\ar\ActiveRecord;
+use yii\db\redis\tests\data\ar\Customer;
+use yii\db\redis\tests\data\ar\OrderItem;
+use yii\db\redis\tests\data\ar\Order;
+use yii\db\redis\tests\data\ar\Item;
+use yii\db\redis\tests\data\ar\OrderItemWithNullFK;
+use yii\db\redis\tests\data\ar\OrderWithNullFK;
+use yii\activerecord\tests\unit\ActiveRecordTestTrait;
 
 /**
  * @group redis

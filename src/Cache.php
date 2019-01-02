@@ -5,10 +5,11 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\redis;
+namespace yii\db\redis;
 
-use Yii;
+use yii\helpers\Yii;
 use yii\di\Instance;
+use yii\di\Initiable;
 
 /**
  * Redis Cache implements a cache application component based on [redis](http://redis.io/) key-value store.
@@ -29,7 +30,7 @@ use yii\di\Instance;
  * [
  *     'components' => [
  *         'cache' => [
- *             'class' => 'yii\redis\Cache',
+ *             '__class' => 'yii\db\redis\Cache',
  *             'redis' => [
  *                 'hostname' => 'localhost',
  *                 'port' => 6379,
@@ -46,7 +47,7 @@ use yii\di\Instance;
  * [
  *     'components' => [
  *         'cache' => [
- *             'class' => 'yii\redis\Cache',
+ *             '__class' => 'yii\db\redis\Cache',
  *             // 'redis' => 'redis' // id of the connection application component
  *         ],
  *     ],
@@ -61,10 +62,10 @@ use yii\di\Instance;
  * [
  *     'components' => [
  *         'cache' => [
- *             'class' => 'yii\redis\Cache',
+ *             '__class' => 'yii\db\redis\Cache',
  *             'enableReplicas' => true,
  *             'replicas' => [
- *                 // config for replica redis connections, (default class will be yii\redis\Connection if not provided)
+ *                 // config for replica redis connections, (default class will be yii\db\redis\Connection if not provided)
  *                 // you can optionally put in master as hostname as well, as all GET operation will use replicas
  *                 'redis',//id of Redis [[Connection]] Component
  *                 ['hostname' => 'redis-slave-002.xyz.0001.apse1.cache.amazonaws.com'],
@@ -78,7 +79,7 @@ use yii\di\Instance;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class Cache extends \yii\caching\Cache
+class Cache extends \yii\cache\Cache implements Initiable
 {
     /**
      * @var Connection|string|array the Redis [[Connection]] object or the application component ID of the Redis [[Connection]].
@@ -97,7 +98,7 @@ class Cache extends \yii\caching\Cache
     /**
      * @var array the Redis [[Connection]] configurations for redis replicas.
      * Each entry is a class configuration, which will be used to instantiate a replica connection.
-     * The default class is [[Connection|yii\redis\Connection]]. You should at least provide a hostname.
+     * The default class is [[Connection|yii\db\redis\Connection]]. You should at least provide a hostname.
      *
      * Configuration example:
      *
@@ -123,9 +124,9 @@ class Cache extends \yii\caching\Cache
     /**
      * Initializes the redis Cache component.
      * This method will initialize the [[redis]] property to make sure it refers to a valid redis connection.
-     * @throws \yii\base\InvalidConfigException if [[redis]] is invalid.
+     * @throws \yii\exceptions\InvalidConfigException if [[redis]] is invalid.
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->redis = Instance::ensure($this->redis, Connection::className());
@@ -253,7 +254,7 @@ class Cache extends \yii\caching\Cache
      * defined in this instance. Only used in getValue() and getValues().
      * @since 2.0.8
      * @return array|string|Connection
-     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\exceptions\InvalidConfigException
      */
     protected function getReplica()
     {

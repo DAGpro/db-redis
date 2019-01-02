@@ -17,20 +17,26 @@
             "email": "mail@cebe.cc"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "yiisoft/yii-core": "^3.0@dev"
     },
     "require-dev": {
+        "hiqdev/composer-config-plugin": "^1.0@dev",
         "phpunit/phpunit": "^7.3",
-        "yiisoft/di": "dev-master",
-        "yiisoft/log": "dev-master",
-        "yiisoft/cache": "dev-master"
+        "yiisoft/di": "^3.0@dev",
+        "yiisoft/log": "^3.0@dev",
+        "yiisoft/cache": "^3.0@dev",
+        "yiisoft/mutex": "^3.0@dev",
+        "yiisoft/yii-web": "^3.0@dev",
+        "yiisoft/active-record": "^3.0@dev"
     },
     "autoload": {
-        "psr-4": { "yii\\redis\\": "src" }
+        "psr-4": { "yii\\db\\redis\\": "src" }
     },
     "autoload-dev": {
-        "psr-4": { "yiiunit\\extensions\\redis\\": "tests/"}
+        "psr-4": { "yii\\db\\redis\\tests\\": "tests/"}
     },
     "extra": {
         "branch-alias": {

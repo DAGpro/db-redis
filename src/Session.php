@@ -5,10 +5,10 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\redis;
+namespace yii\db\redis;
 
-use Yii;
-use yii\base\InvalidConfigException;
+use yii\helpers\Yii;
+use yii\exceptions\InvalidConfigException;
 
 /**
  * Redis Session implements a session component using [redis](http://redis.io/) as the storage medium.
@@ -24,7 +24,7 @@ use yii\base\InvalidConfigException;
  * [
  *     'components' => [
  *         'session' => [
- *             'class' => 'yii\redis\Session',
+ *             '__class' => 'yii\db\redis\Session',
  *             'redis' => [
  *                 'hostname' => 'localhost',
  *                 'port' => 6379,
@@ -41,7 +41,7 @@ use yii\base\InvalidConfigException;
  * [
  *     'components' => [
  *         'session' => [
- *             'class' => 'yii\redis\Session',
+ *             '__class' => 'yii\db\redis\Session',
  *             // 'redis' => 'redis' // id of the connection application component
  *         ],
  *     ],
@@ -82,8 +82,8 @@ class Session extends \yii\web\Session
         if (is_string($this->redis)) {
             $this->redis = Yii::$app->get($this->redis);
         } elseif (is_array($this->redis)) {
-            if (!isset($this->redis['class'])) {
-                $this->redis['class'] = Connection::className();
+            if (!isset($this->redis['__class'])) {
+                $this->redis['__class'] = Connection::class;
             }
             $this->redis = Yii::createObject($this->redis);
         }
